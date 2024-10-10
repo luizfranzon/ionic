@@ -1,0 +1,17 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Recipes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    @if(recipesData().length === 0) {
+    <ion-item>
+      <ion-label>No recipes found</ion-label>
+    </ion-item>
+    } @else { @for(recipe of recipesData(); track recipe.id) {
+    <app-recipe-item [recipeData]="recipe" />
+    } }
+  </ion-list>
+</ion-content>

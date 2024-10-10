@@ -1,0 +1,44 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button
+        defaultHref="/recipes"
+        icon="caret-back"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ recipeData()?.title }}</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="handleDeleteRecipe()">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="ion-no-padding">
+    <ion-row>
+      <ion-col class="ion-no-padding">
+        <ion-img [src]="recipeData()?.imageUrl"></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-title class="ion-text-center ion-margin-vertical"
+          >{{ recipeData()?.title }}</ion-title
+        >
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          @for(ingredient of recipeData()?.ingredients; track ingredient) {
+          <ion-item>
+            <ion-label>{{ ingredient }}</ion-label>
+          </ion-item>
+          }
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
