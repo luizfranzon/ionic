@@ -7,15 +7,13 @@ import { RecipesService } from 'src/app/services/recipes.service';
   templateUrl: './recipes.page.html',
   styleUrls: ['./recipes.page.scss'],
 })
-export class RecipesPage implements OnInit {
+export class RecipesPage {
   recipesService = inject(RecipesService);
   router = inject(Router);
 
   recipesData = signal(this.recipesService.getRecipes());
 
-  ngOnInit() {
-    this.router.events.subscribe(() => {
-      this.recipesData.set(this.recipesService.getRecipes());
-    });
+  ionViewWillEnter() {
+    this.recipesData.set(this.recipesService.getRecipes());
   }
 }
