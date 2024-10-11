@@ -1,6 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { IonItemSliding, ModalController } from '@ionic/angular';
 import { Place } from 'src/app/models/place.model';
 import { PlacesService } from 'src/app/services/places.service';
+import { NewOfferPage } from '../new-offer/new-offer.page';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-offers',
@@ -9,6 +12,12 @@ import { PlacesService } from 'src/app/services/places.service';
 })
 export class OffersPage {
   placesService = inject(PlacesService);
+  router = inject(Router);
 
   offers = signal<Place[]>(this.placesService.places);
+
+  onEdit(id: string, slidingItem: IonItemSliding) {
+    slidingItem.close();
+    this.router.navigate(['/places/tabs/offers/edit', id]);
+  }
 }

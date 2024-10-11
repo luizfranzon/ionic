@@ -1,0 +1,16 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Authenticate</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-item lines="none">
+    <ion-input
+      label="E-Mail"
+      labelPlacement="floating"
+      placeholder="email@exemplo.com"
+    ></ion-input>
+  </ion-item>
+  <ion-button color="primary" (click)="onLogin()">Login</ion-button>
+</ion-content>
