@@ -5,9 +5,9 @@ import { Place } from 'src/app/models/place.model';
 import { PlacesService } from 'src/app/services/places.service';
 
 @Component({
-  selector: 'app-offers-bookings',
-  templateUrl: './offers-bookings.page.html',
-  styleUrls: ['./offers-bookings.page.scss'],
+  selector: 'app-offer-bookings',
+  templateUrl: './offer-bookings.page.html',
+  styleUrls: ['./offer-bookings.page.scss'],
 })
 export class OffersBookingsPage implements OnInit {
   route = inject(ActivatedRoute);

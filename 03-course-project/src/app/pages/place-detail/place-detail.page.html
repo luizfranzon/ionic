@@ -3,12 +3,12 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title>Place Detail</ion-title>
+    <ion-title>{{ placeData()?.title }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-button color="primary" class="ion-margin" (click)="onBookPlace()"
-    >Book</ion-button
-  >
+  <ion-button color="primary" class="ion-margin" (click)="onBookPlace()">
+    <span>Book</span>
+  </ion-button>
 </ion-content>
