@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Place } from 'src/app/models/place.model';
 
@@ -7,7 +7,7 @@ import { Place } from 'src/app/models/place.model';
   templateUrl: './create-booking.component.html',
   styleUrls: ['./create-booking.component.scss'],
 })
-export class CreateBookingComponent implements OnInit {
+export class CreateBookingComponent {
   modalCtrl = inject(ModalController);
 
   selectedPlace = input.required<Place>();
@@ -23,6 +23,4 @@ export class CreateBookingComponent implements OnInit {
       'bookingModal'
     );
   }
-
-  ngOnInit() {}
 }

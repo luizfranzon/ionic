@@ -1,8 +1,7 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { IonItemSliding, ModalController } from '@ionic/angular';
+import { Component, inject, signal } from '@angular/core';
+import { IonItemSliding } from '@ionic/angular';
 import { Place } from 'src/app/models/place.model';
 import { PlacesService } from 'src/app/services/places.service';
-import { NewOfferPage } from '../new-offer/new-offer.page';
 import { Router } from '@angular/router';
 
 @Component({
