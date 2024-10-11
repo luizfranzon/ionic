@@ -1,20 +1,90 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Authenticate</ion-title>
+    <ion-title>{{ isLoginAuthMode() === true ? "Login" : "Signup" }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-item lines="none">
-    <ion-input
-      label="E-Mail"
-      labelPlacement="floating"
-      placeholder="email@exemplo.com"
-    ></ion-input>
-  </ion-item>
-  <div class="ion-text-center ion-padding-vertical">
-    @if (isLoading() === true) {
-    <ion-spinner color="primary"></ion-spinner>
-    } @else {<ion-button color="primary" (click)="onLogin()">Login</ion-button>}
-  </div>
+  <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-md="6" offset-md="3">
+          <ion-list>
+            <ion-item lines="">
+              <ion-input
+                label="E-mail"
+                labelPlacement="floating"
+                placeholder="email@exemplo.com"
+                type="email"
+                ngModel
+                name="email"
+                id="email"
+                email
+                required
+                #emailCtrl="ngModel"
+              ></ion-input>
+            </ion-item>
+            <ion-item
+              class="ion-text-center"
+              *ngIf="!emailCtrl.valid && emailCtrl.touched"
+              lines="none"
+            >
+              <ion-label>Email is required</ion-label>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-input
+                label="Password"
+                labelPlacement="floating"
+                placeholder="************"
+                type="password"
+                ngModel
+                name="password"
+                id="password"
+                required="true"
+                minlength="8"
+                #passwordCtrl="ngModel"
+              ></ion-input>
+            </ion-item>
+            <ion-item
+              class="ion-text-center"
+              *ngIf="!passwordCtrl.valid && passwordCtrl.touched"
+              lines="none"
+            >
+              <ion-label>Password must be at leats 8 characters</ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <div class="ion-text-center ion-padding-vertical">
+            @if (isLoading() === true) {
+            <ion-spinner color="primary"></ion-spinner>
+            } @else {
+            <div>
+              <ion-button
+                type="button"
+                size="block"
+                color="primary"
+                fill="clear"
+                (click)="onSwitchAuthMode()"
+              >
+                Switch to{{ isLoginAuthMode() === true ? " Signup" : " Login"
+                }}</ion-button
+              >
+              <ion-button
+                [disabled]="!form.valid"
+                type="submit"
+                size="block"
+                color="primary"
+                (click)="onSubmit(form)"
+                >Login</ion-button
+              >
+            </div>
+            }
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
 </ion-content>

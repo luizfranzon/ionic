@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
@@ -14,6 +15,7 @@ export class AuthPage {
   loadingCtrl = inject(LoadingController);
 
   isLoading = signal(false);
+  isLoginAuthMode = signal<boolean>(true);
 
   onLogin() {
     this.authService.login();
@@ -22,14 +24,36 @@ export class AuthPage {
       .create({
         spinner: 'bubbles',
         message: 'Loggin in...',
+        id: 'loginLoading',
       })
       .then((loadingEl) => {
         loadingEl.present();
+
+        setTimeout(() => {
+          this.isLoading.set(false);
+          loadingEl.dismiss('loginLoading');
+          this.router.navigateByUrl('/places/tabs/discover');
+        }, 1500);
       });
-    setTimeout(() => {
-      this.isLoading.set(false);
-      this.loadingCtrl.dismiss();
-      this.router.navigateByUrl('/places/tabs/discover');
-    }, 2000); //Fake network throttling of 2 seconds
+  }
+
+  onSwitchAuthMode() {
+    this.isLoginAuthMode.update((isLogin) => !isLogin);
+  }
+
+  onSubmit(form: NgForm) {
+    if (!form.valid) {
+      return;
+    }
+
+    // const email = form.value.email;
+    // const password = form.value.password;
+
+    if (this.isLoginAuthMode()) {
+      this.onLogin();
+      form.reset();
+    } else {
+      //a
+    }
   }
 }
