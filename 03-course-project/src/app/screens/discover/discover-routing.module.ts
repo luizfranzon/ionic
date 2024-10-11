@@ -6,8 +6,8 @@ import { DiscoverPage } from './discover.page';
 const routes: Routes = [
   {
     path: '',
-    component: DiscoverPage
-  }
+    component: DiscoverPage,
+  },
 ];
 
 @NgModule({

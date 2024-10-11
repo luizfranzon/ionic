@@ -1,9 +1,15 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalController, NavController } from '@ionic/angular';
+import {
+  ActionSheetController,
+  ModalController,
+  NavController,
+} from '@ionic/angular';
 import { CreateBookingComponent } from 'src/app/components/create-booking/create-booking.component';
 import { Place } from 'src/app/models/place.model';
 import { PlacesService } from 'src/app/services/places.service';
+
+type BookingMode = 'select' | 'random';
 
 @Component({
   selector: 'app-place-detail',
@@ -14,11 +20,37 @@ export class PlaceDetailPage implements OnInit {
   placeData = signal<Place | undefined>(undefined);
 
   navCtrl = inject(NavController);
-  activatedRoute = inject(ActivatedRoute);
-  placesService = inject(PlacesService);
   modalCtrl = inject(ModalController);
+  placesService = inject(PlacesService);
+  activatedRoute = inject(ActivatedRoute);
+  actionSheetCtrl = inject(ActionSheetController);
 
   onBookPlace() {
+    this.actionSheetCtrl
+      .create({
+        header: 'Choose an Action',
+        buttons: [
+          {
+            text: 'Select date',
+            handler: () => this.openBookingModal('select'),
+          },
+          {
+            text: 'Random Date',
+            handler: () => this.openBookingModal('random'),
+          },
+          {
+            text: 'Cancel',
+            role: 'cancel',
+          },
+        ],
+      })
+      .then((actionSheetEL) => {
+        actionSheetEL.present();
+      });
+  }
+
+  openBookingModal(mode: BookingMode) {
+    console.log(mode);
     this.modalCtrl
       .create({
         component: CreateBookingComponent,

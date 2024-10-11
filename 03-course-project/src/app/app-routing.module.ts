@@ -11,19 +11,19 @@ const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () =>
-      import('./pages/auth/auth.module').then((m) => m.AuthPageModule),
+      import('./screens/auth/auth.module').then((m) => m.AuthPageModule),
   },
   {
     path: 'places',
     canActivateChild: [authGuard],
     loadChildren: () =>
-      import('./pages/places/places.module').then((m) => m.PlacesPageModule),
+      import('./screens/places/places.module').then((m) => m.PlacesPageModule),
   },
   {
     path: 'bookings',
     canActivateChild: [authGuard],
     loadChildren: () =>
-      import('./pages/bookings/bookings.module').then(
+      import('./screens/bookings/bookings.module').then(
         (m) => m.BookingsPageModule
       ),
   },

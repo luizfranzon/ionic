@@ -12,5 +12,9 @@
       placeholder="email@exemplo.com"
     ></ion-input>
   </ion-item>
-  <ion-button color="primary" (click)="onLogin()">Login</ion-button>
+  <div class="ion-text-center ion-padding-vertical">
+    @if (isLoading() === true) {
+    <ion-spinner color="primary"></ion-spinner>
+    } @else {<ion-button color="primary" (click)="onLogin()">Login</ion-button>}
+  </div>
 </ion-content>
