@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Place } from 'src/app/models/place.model';
 import { PlacesService } from 'src/app/services/places.service';
@@ -15,12 +15,13 @@ export class EditOfferPage implements OnInit {
 
   form!: FormGroup;
 
-  route = inject(ActivatedRoute);
+  activatedRoute = inject(ActivatedRoute);
   placesService = inject(PlacesService);
   navCtrl = inject(NavController);
+  router = inject(Router);
 
   ngOnInit() {
-    this.route.paramMap.subscribe((paramMap) => {
+    this.activatedRoute.paramMap.subscribe((paramMap) => {
       if (!paramMap.has('placeId')) {
         this.navCtrl.navigateBack('/places/tabs/offers');
         return;
@@ -49,6 +50,16 @@ export class EditOfferPage implements OnInit {
   onUpdateOffer() {
     if (!this.form.valid) {
       return;
+    }
+
+    const place = this.placeData();
+    if (place && place.id) {
+      this.placesService.updatePlaceById(place.id, {
+        title: this.form.value.title,
+        description: this.form.value.description,
+      });
+
+      this.router.navigateByUrl('/places/tabs/offers');
     }
   }
 }

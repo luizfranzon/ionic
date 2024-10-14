@@ -7,6 +7,7 @@ import {
 } from '@ionic/angular';
 import { CreateBookingComponent } from 'src/app/components/create-booking/create-booking.component';
 import { Place } from 'src/app/models/place.model';
+import { BookingService } from 'src/app/services/booking.service';
 import { PlacesService } from 'src/app/services/places.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class PlaceDetailPage implements OnInit {
   navCtrl = inject(NavController);
   modalCtrl = inject(ModalController);
   placesService = inject(PlacesService);
+  bookingService = inject(BookingService);
   activatedRoute = inject(ActivatedRoute);
   actionSheetCtrl = inject(ActionSheetController);
 
@@ -56,7 +58,12 @@ export class PlaceDetailPage implements OnInit {
       })
       .then((resultData) => {
         if (resultData.role === 'confirm') {
-          //
+          this.bookingService.addBooking({
+            ...resultData.data.bookingData,
+            placeId: this.placeData()?.id,
+            placeTitle: this.placeData()?.title,
+            placeImage: this.placeData()?.imageUrl,
+          });
         }
 
         if (resultData.role === 'cancel') {

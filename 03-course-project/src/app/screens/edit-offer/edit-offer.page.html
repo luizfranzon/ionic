@@ -47,7 +47,11 @@
       @if(!form.get('description')?.valid && form.get('description')?.touched) {
       <ion-row>
         <ion-col>
-          <p>Description must be between 1 and 180 characters.</p>
+          <ion-item class="ion-text-center">
+            <ion-label color="danger">
+              Description must be between 1 and 180 characters!.
+            </ion-label>
+          </ion-item>
         </ion-col>
       </ion-row>
       }

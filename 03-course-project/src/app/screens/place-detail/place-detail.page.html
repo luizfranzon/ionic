@@ -8,7 +8,40 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-button color="primary" class="ion-margin" (click)="onBookPlace()">
-    <span>Book</span>
-  </ion-button>
+  <ion-grid class="ion-no-padding">
+    <ion-row>
+      <ion-col>
+        <ion-img class="ion-no-padding" [src]="placeData()?.imageUrl" />
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-padding">
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>{{ placeData()?.title }}</ion-card-title>
+            <ion-card-subtitle>
+              {{ placeData()?.price | currency : 'BRL' }} / Night
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-label>{{ placeData()?.description }}</ion-label>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col> </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
+
+<ion-footer>
+  <ion-button
+    expand="block"
+    color="primary"
+    class="ion-margin ion-padding"
+    (click)="onBookPlace()"
+  >
+    <span>BOOK THIS PLACE</span>
+  </ion-button>
+</ion-footer>
