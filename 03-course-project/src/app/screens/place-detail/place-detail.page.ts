@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import {
   ActionSheetController,
   ModalController,
@@ -8,8 +8,6 @@ import {
 import { CreateBookingComponent } from 'src/app/components/create-booking/create-booking.component';
 import { Place } from 'src/app/models/place.model';
 import { PlacesService } from 'src/app/services/places.service';
-
-type BookingMode = 'select' | 'random';
 
 @Component({
   selector: 'app-place-detail',
@@ -32,11 +30,11 @@ export class PlaceDetailPage implements OnInit {
         buttons: [
           {
             text: 'Select date',
-            handler: () => this.openBookingModal('select'),
+            handler: () => this.openBookingModal(),
           },
           {
             text: 'Random Date',
-            handler: () => this.openBookingModal('random'),
+            handler: () => this.openBookingModal(),
           },
           {
             text: 'Cancel',
@@ -49,8 +47,7 @@ export class PlaceDetailPage implements OnInit {
       });
   }
 
-  openBookingModal(mode: BookingMode) {
-    console.log(mode);
+  openBookingModal() {
     this.modalCtrl
       .create({
         component: CreateBookingComponent,

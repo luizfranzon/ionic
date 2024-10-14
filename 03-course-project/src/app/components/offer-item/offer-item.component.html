@@ -10,12 +10,14 @@
     <h2>{{ offer().title }}</h2>
     <div class="offer-details">
       <ion-icon name="calendar" slot="start"></ion-icon>
-      <ion-text color="primary">{{ getDate() | date : "dd/MM" }}</ion-text>
+      <ion-text color="primary">{{
+        offer().dateFrom | date : "dd/MM"
+      }}</ion-text>
       <div>
         <ion-icon name="arrow-forward-outline" slot="start"></ion-icon>
       </div>
       <ion-icon name="calendar" slot="start"></ion-icon>
-      <ion-text color="primary">{{ getDate() | date : "dd/MM" }}</ion-text>
+      <ion-text color="primary">{{ offer().dateTo | date : "dd/MM" }}</ion-text>
     </div>
   </ion-label>
 </ion-item>

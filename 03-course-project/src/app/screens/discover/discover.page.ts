@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MenuController, SegmentChangeEventDetail } from '@ionic/angular';
 import { PlacesService } from 'src/app/services/places.service';
 import { IonSegmentCustomEvent } from '@ionic/core';

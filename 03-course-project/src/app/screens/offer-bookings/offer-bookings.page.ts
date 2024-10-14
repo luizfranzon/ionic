@@ -16,8 +16,6 @@ export class OffersBookingsPage implements OnInit {
 
   placeData = signal<Place | undefined>(undefined);
 
-  constructor() {}
-
   ngOnInit() {
     this.route.paramMap.subscribe((paramMap) => {
       if (!paramMap.has('placeId')) {

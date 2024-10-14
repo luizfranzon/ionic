@@ -8,8 +8,4 @@ import { Place } from 'src/app/models/place.model';
 })
 export class OfferItemComponent {
   offer = input.required<Place>();
-
-  getDate() {
-    return new Date();
-  }
 }

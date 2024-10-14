@@ -19,4 +19,8 @@ export class OffersPage {
     slidingItem.close();
     this.router.navigate(['/places/tabs/offers/edit', id]);
   }
+
+  ionViewWillEnter() {
+    this.offers.set(this.placesService.places);
+  }
 }

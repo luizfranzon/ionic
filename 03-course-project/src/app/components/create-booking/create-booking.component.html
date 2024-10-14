@@ -10,6 +10,102 @@
 </ion-header>
 
 <ion-content>
-  <h1>{{ selectedPlace().description }}</h1>
-  <ion-button color="primary" (click)="onBookPlace()">Book</ion-button>
+  <form [formGroup]="form" (submit)="onBookPlace()">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-input
+              label="First name"
+              labelPlacement="floating"
+              placeholder="John"
+              required="true"
+              formControlName="firstName"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-input
+              label="Last name"
+              labelPlacement="floating"
+              placeholder="Doe"
+              required="true"
+              formControlName="lastName"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-select
+              formControlName="guestQuantity"
+              [value]="form.value.guestQuantity"
+            >
+              <ion-select-option value="1">1 guest</ion-select-option>
+              <ion-select-option value="2">2 guests</ion-select-option>
+              <ion-select-option value="3">3 guests</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label>From</ion-label>
+            <ion-datetime-button datetime="dateFrom"></ion-datetime-button>
+            <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime
+                  locale="pt-BR"
+                  (ionChange)="verifyIfDateToIsAfterDateFrom()"
+                  display-format="DD MMM YYYY"
+                  [min]="verifyIfDateFromIsBeforeToday()"
+                  [max]="selectedPlace().dateTo.toISOString()"
+                  placeholder="Select Date"
+                  id="dateFrom"
+                  formControlName="dateFrom"
+                ></ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label>To</ion-label>
+            <ion-datetime-button datetime="dateTo"></ion-datetime-button>
+            <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime
+                  locale="pt-BR"
+                  display-format="DD MMM YYYY"
+                  [min]="form.value.dateFrom"
+                  [max]="selectedPlace().dateTo.toISOString()"
+                  placeholder="Select Date"
+                  id="dateTo"
+                  formControlName="dateTo"
+                ></ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button
+            class="ion-padding"
+            expand="block"
+            color="primary"
+            type="submit"
+            [disabled]="!form.valid"
+          >
+            Book
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
 </ion-content>

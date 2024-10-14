@@ -2,11 +2,55 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button
-        [defaultHref]="'/places/tabs/offers' + placeData()?.id"
+        [defaultHref]="'/places/tabs/offers/' + placeData()?.id"
       ></ion-back-button>
     </ion-buttons>
     <ion-title>Edit Offer</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [disabled]="!form.valid" (click)="onUpdateOffer()">
+        <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true"> </ion-content>
+<ion-content [fullscreen]="true">
+  <form [formGroup]="form">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-sm="6">
+          <ion-item>
+            <ion-input
+              label="Title"
+              labelPlacement="floating"
+              placeholder="Title"
+              autocomplete="true"
+              autocorrect="true"
+              formControlName="title"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-textarea
+              label="Description"
+              labelPlacement="floating"
+              placeholder="Description"
+              rows="5"
+              formControlName="description"
+            ></ion-textarea>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      @if(!form.get('description')?.valid && form.get('description')?.touched) {
+      <ion-row>
+        <ion-col>
+          <p>Description must be between 1 and 180 characters.</p>
+        </ion-col>
+      </ion-row>
+      }
+    </ion-grid>
+  </form>
+</ion-content>

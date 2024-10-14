@@ -1,0 +1,16 @@
+<ion-item>
+  <ion-label>{{ fieldLabel() }}</ion-label>
+  <ion-datetime-button datetime="datetime"></ion-datetime-button>
+</ion-item>
+
+<ion-modal [keepContentsMounted]="true">
+  <ng-template>
+    <ion-datetime
+      locale="pt-BR"
+      id="datetime"
+      [min]="minDate"
+      [max]="maxDate"
+      [formControlName]="formControlName()"
+    ></ion-datetime>
+  </ng-template>
+</ion-modal>
