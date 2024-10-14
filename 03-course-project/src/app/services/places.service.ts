@@ -53,10 +53,8 @@ export class PlacesService {
   addPlace(data: CreatePlaceData) {
     const { title, description, price, dateFrom, dateTo } = data;
 
-    console.log('DEBUG - Adding place:', data);
-
     const newPlace = new Place(
-      Math.random().toString(),
+      Math.floor(Math.random() * 1000).toString(),
       title,
       description,
       'https://upload.wikimedia.org/wikipedia/commons/f/fa/Foggy_Day_Neuschwanstein_Castle_%28229936735%29.jpeg',

@@ -8,9 +8,10 @@ import { OffersPageRoutingModule } from './offers-routing.module';
 
 import { OffersPage } from './offers.page';
 import { OfferItemComponent } from 'src/app/components/offer-item/offer-item.component';
+import { OfferItemSkeletonComponent } from 'src/app/components/skeletons/offer-item-skeleton/offer-item-skeleton.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, OffersPageRoutingModule],
-  declarations: [OffersPage, OfferItemComponent],
+  declarations: [OffersPage, OfferItemComponent, OfferItemSkeletonComponent],
 })
 export class OffersPageModule {}

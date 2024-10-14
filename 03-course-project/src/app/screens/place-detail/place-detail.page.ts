@@ -33,10 +33,6 @@ export class PlaceDetailPage implements OnInit {
             handler: () => this.openBookingModal(),
           },
           {
-            text: 'Random Date',
-            handler: () => this.openBookingModal(),
-          },
-          {
             text: 'Cancel',
             role: 'cancel',
           },
@@ -60,11 +56,11 @@ export class PlaceDetailPage implements OnInit {
       })
       .then((resultData) => {
         if (resultData.role === 'confirm') {
-          console.log('BOOKED!');
+          //
         }
 
         if (resultData.role === 'cancel') {
-          console.log('CANCELLED!');
+          //
         }
       });
   }

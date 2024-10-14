@@ -19,7 +19,7 @@ export class DiscoverPage {
   }
 
   onFilterUpdate(event: IonSegmentCustomEvent<SegmentChangeEventDetail>) {
-    console.log(event.detail);
+    //
   }
 
   // onOpenMenu() {

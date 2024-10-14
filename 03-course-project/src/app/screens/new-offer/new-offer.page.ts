@@ -40,8 +40,6 @@ export class NewOfferPage {
       return;
     }
 
-    console.log(this.form.value);
-
     this.placesService.addPlace({
       ...this.form.value,
       availableFrom: new Date(this.form.value.dateFrom),

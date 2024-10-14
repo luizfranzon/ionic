@@ -17,7 +17,7 @@
     <ion-row>
       <ion-col>
         <ion-list>
-          @for(offer of offers(); track offer.id) {
+          @if (!isLoading()) { @for(offer of offers(); track offer.id) {
           <ion-item-sliding #slidingItem>
             <app-offer-item [offer]="offer"></app-offer-item>
             <ion-item-options>
@@ -30,7 +30,9 @@
             </ion-item-options>
           </ion-item-sliding>
 
-          }
+          } } @else { @for(i of skeletonArray(); track i) {
+          <app-offer-item-skeleton></app-offer-item-skeleton>
+          } }
         </ion-list>
       </ion-col>
     </ion-row>

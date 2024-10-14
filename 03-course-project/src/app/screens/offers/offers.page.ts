@@ -10,8 +10,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./offers.page.scss'],
 })
 export class OffersPage {
-  placesService = inject(PlacesService);
-  router = inject(Router);
+  private placesService = inject(PlacesService);
+  private router = inject(Router);
+
+  public isLoading = signal<boolean>(false);
+  public skeletonArray = signal<number[]>(Array.from(Array(5).keys()));
 
   offers = signal<Place[]>(this.placesService.places);
 
@@ -21,6 +24,10 @@ export class OffersPage {
   }
 
   ionViewWillEnter() {
-    this.offers.set(this.placesService.places);
+    this.isLoading.set(true);
+    setTimeout(() => {
+      this.offers.set(this.placesService.places);
+      this.isLoading.set(false);
+    }, Math.random() * 1500);
   }
 }
