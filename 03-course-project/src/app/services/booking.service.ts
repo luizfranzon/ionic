@@ -25,7 +25,7 @@ export class BookingService {
       userId: 'abc',
       placeTitle: 'Manhattan Mansion',
       guestQuantity: 2,
-      placeImage: 'https://via.placeholder.com/300',
+      placeImage: 'https://placehold.co/300x300',
       firstName: 'Max',
       lastName: 'Schwarz',
       dateFrom: new Date('2019-01-01'),

@@ -17,4 +17,8 @@ export class BookingsPage {
     this.loadedBookings = signal(this.bookingsService.bookings);
     slidingBookingEL.close();
   }
+
+  ionViewWillEnter() {
+    this.loadedBookings = signal(this.bookingsService.bookings);
+  }
 }
