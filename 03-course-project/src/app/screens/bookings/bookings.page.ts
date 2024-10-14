@@ -13,6 +13,8 @@ export class BookingsPage {
   loadedBookings = signal(this.bookingsService.bookings);
 
   onCancelBooking(bookingId: string, slidingBookingEL: IonItemSliding) {
+    this.bookingsService.cancelBooking(bookingId);
+    this.loadedBookings = signal(this.bookingsService.bookings);
     slidingBookingEL.close();
   }
 }

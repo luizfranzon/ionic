@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   ActionSheetController,
@@ -7,6 +7,7 @@ import {
 } from '@ionic/angular';
 import { CreateBookingComponent } from 'src/app/components/create-booking/create-booking.component';
 import { Place } from 'src/app/models/place.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { BookingService } from 'src/app/services/booking.service';
 import { PlacesService } from 'src/app/services/places.service';
 
@@ -16,14 +17,19 @@ import { PlacesService } from 'src/app/services/places.service';
   styleUrls: ['./place-detail.page.scss'],
 })
 export class PlaceDetailPage implements OnInit {
-  placeData = signal<Place | undefined>(undefined);
+  public placeData = signal<Place | undefined>(undefined);
+  public isBookable = computed(() => {
+    const userId = this.authService.userId();
+    return userId !== this.placeData()?.userId;
+  });
 
-  navCtrl = inject(NavController);
-  modalCtrl = inject(ModalController);
-  placesService = inject(PlacesService);
-  bookingService = inject(BookingService);
-  activatedRoute = inject(ActivatedRoute);
-  actionSheetCtrl = inject(ActionSheetController);
+  private navCtrl = inject(NavController);
+  private modalCtrl = inject(ModalController);
+  private placesService = inject(PlacesService);
+  private bookingService = inject(BookingService);
+  private activatedRoute = inject(ActivatedRoute);
+  private actionSheetCtrl = inject(ActionSheetController);
+  private authService = inject(AuthService);
 
   onBookPlace() {
     this.actionSheetCtrl

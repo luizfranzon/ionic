@@ -38,7 +38,6 @@ export class BookingService {
   }
 
   addBooking(data: CreateBookingData) {
-    console.log(data);
     const {
       placeId,
       placeTitle,
@@ -59,12 +58,16 @@ export class BookingService {
       placeImage,
       firstName,
       lastName,
-      dateFrom,
-      dateTo
+      new Date(dateFrom),
+      new Date(dateTo)
     );
 
-    console.log(newBooking);
+    this._bookings.update((bookings) => [...bookings, { ...newBooking }]);
+  }
 
-    this._bookings.update((bookings) => [...bookings, newBooking]);
+  cancelBooking(bookingId: string) {
+    this._bookings.update((bookings) =>
+      bookings.filter((b) => b.id !== bookingId)
+    );
   }
 }

@@ -36,12 +36,22 @@
 </ion-content>
 
 <ion-footer>
+  @if(!isBookable()) {
+  <ion-item>
+    <ion-label color="danger ion-text-center">
+      You cannot book your own place.
+    </ion-label>
+  </ion-item>
+  }
   <ion-button
     expand="block"
     color="primary"
     class="ion-margin ion-padding"
     (click)="onBookPlace()"
+    [disabled]="!isBookable()"
   >
-    <span>BOOK THIS PLACE</span>
+    <div>
+      <span>BOOK THIS PLACE</span>
+    </div>
   </ion-button>
 </ion-footer>

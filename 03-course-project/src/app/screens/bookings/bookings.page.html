@@ -9,7 +9,8 @@
 
 <ion-content [fullscreen]="true">
   <ion-list>
-    @for(booking of loadedBookings(); track booking.id) {
+    @if(loadedBookings().length > 0) { @for(booking of loadedBookings(); track
+    booking.id) {
     <ion-item-sliding #slidingBooking>
       <ion-item lines="none">
         <ion-label>
@@ -26,6 +27,12 @@
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
+    } } @else {
+    <ion-item lines="none">
+      <ion-label>
+        <h2 class="ion-text-center">No bookings found.</h2>
+      </ion-label>
+    </ion-item>
     }
   </ion-list>
 </ion-content>
