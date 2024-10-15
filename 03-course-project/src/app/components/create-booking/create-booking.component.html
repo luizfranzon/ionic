@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content>
-  <form [formGroup]="form" (submit)="onBookPlace()">
+  <form *ngIf="!!form" [formGroup]="form" (submit)="onBookPlace()">
     <ion-grid>
       <ion-row>
         <ion-col>
@@ -62,7 +62,7 @@
                   (ionChange)="verifyIfDateToIsAfterDateFrom()"
                   display-format="DD MMM YYYY"
                   [min]="verifyIfDateFromIsBeforeToday()"
-                  [max]="selectedPlace().dateTo.toISOString()"
+                  [max]=""
                   placeholder="Select Date"
                   id="dateFrom"
                   formControlName="dateFrom"
@@ -83,7 +83,7 @@
                   locale="pt-BR"
                   display-format="DD MMM YYYY"
                   [min]="form.value.dateFrom"
-                  [max]="selectedPlace().dateTo.toISOString()"
+                  [max]="formatMaxDateTo()"
                   placeholder="Select Date"
                   id="dateTo"
                   formControlName="dateTo"

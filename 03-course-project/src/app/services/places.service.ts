@@ -43,8 +43,8 @@ export class PlacesService {
                 response[key].description,
                 response[key].imageUrl,
                 response[key].price,
-                new Date(response[key].dateFrom),
-                new Date(response[key].dateTo),
+                response[key].dateFrom,
+                response[key].dateTo,
                 response[key].userId
               )
             );
@@ -69,8 +69,8 @@ export class PlacesService {
       description,
       'https://upload.wikimedia.org/wikipedia/commons/f/fa/Foggy_Day_Neuschwanstein_Castle_%28229936735%29.jpeg',
       price,
-      new Date(dateFrom),
-      new Date(dateTo),
+      dateFrom,
+      dateTo,
       this.authService.userId()
     );
 

@@ -1,4 +1,11 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { Place } from 'src/app/models/place.model';
@@ -7,6 +14,7 @@ import { Place } from 'src/app/models/place.model';
   selector: 'app-create-booking',
   templateUrl: './create-booking.component.html',
   styleUrls: ['./create-booking.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateBookingComponent implements OnInit {
   modalCtrl = inject(ModalController);
@@ -50,23 +58,29 @@ export class CreateBookingComponent implements OnInit {
   }
 
   verifyIfDateToIsAfterDateFrom() {
-    const dateFrom = new Date(this.form.value.dateFrom);
     const dateTo = new Date(this.form.value.dateTo);
+    const dateFrom = new Date(this.form.value.dateFrom);
 
     if (dateTo <= dateFrom) {
-      this.form.get('dateTo')?.setValue(dateFrom.toISOString());
+      this.form.get('dateTo')?.setValue(new Date(dateFrom).toISOString());
     }
   }
 
   verifyIfDateFromIsBeforeToday() {
-    const dateFrom = new Date(this.selectedPlace().dateFrom);
     const today = new Date(this.todayDate());
+    const dateFrom = new Date(this.selectedPlace().dateFrom);
 
     if (dateFrom < today) {
       return today.toISOString();
     }
 
     return dateFrom.toISOString();
+  }
+
+  formatMaxDateTo() {
+    const dateTo = new Date(this.selectedPlace().dateTo).toISOString();
+    console.log(dateTo);
+    return dateTo;
   }
 
   onCancel() {

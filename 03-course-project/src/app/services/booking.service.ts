@@ -1,6 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Booking } from '../models/booking.model';
 import { AuthService } from './auth.service';
+import { HttpClient } from '@angular/common/http';
 
 interface CreateBookingData {
   placeId: string;
@@ -17,6 +18,10 @@ interface CreateBookingData {
 })
 export class BookingService {
   private authService = inject(AuthService);
+  private httpClient = inject(HttpClient);
+
+  private firebaseUrl =
+    'https://ionic-course-45875-default-rtdb.firebaseio.com/bookings.json';
 
   private _bookings = signal<Booking[]>([
     {
@@ -62,7 +67,9 @@ export class BookingService {
       new Date(dateTo)
     );
 
-    this._bookings.update((bookings) => [...bookings, { ...newBooking }]);
+    this.httpClient.post(this.firebaseUrl, { ...newBooking }).subscribe(() => {
+      this._bookings.update((bookings) => [...bookings, { ...newBooking }]);
+    });
   }
 
   cancelBooking(bookingId: string) {
