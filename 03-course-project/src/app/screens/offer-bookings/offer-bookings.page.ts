@@ -13,6 +13,7 @@ export class OffersBookingsPage implements OnInit {
   route = inject(ActivatedRoute);
   navCtrl = inject(NavController);
   placesService = inject(PlacesService);
+  isLoading = signal<boolean>(true);
 
   placeData = signal<Place | undefined>(undefined);
 
@@ -27,6 +28,7 @@ export class OffersBookingsPage implements OnInit {
       this.placesService.getPlaceById(placeId!).subscribe((place) => {
         if (place) {
           this.placeData.set(place as Place);
+          this.isLoading.set(false);
         }
       });
     });

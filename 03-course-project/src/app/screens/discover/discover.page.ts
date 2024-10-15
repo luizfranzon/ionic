@@ -26,7 +26,6 @@ export class DiscoverPage {
   isLoading = signal<boolean>(true);
 
   ionViewWillEnter() {
-    console.log(this.isLoading());
     this.isLoading.set(true);
     this.placeServices.fetchPlaces();
     this.placeServices.$places.subscribe(() => {
@@ -37,7 +36,6 @@ export class DiscoverPage {
       }
 
       this.isLoading.set(false);
-      console.log(this.isLoading());
     });
   }
 

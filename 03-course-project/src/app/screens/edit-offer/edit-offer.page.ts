@@ -15,40 +15,52 @@ export class EditOfferPage implements OnInit {
 
   form!: FormGroup;
 
-  activatedRoute = inject(ActivatedRoute);
-  placesService = inject(PlacesService);
-  navCtrl = inject(NavController);
   router = inject(Router);
+  navCtrl = inject(NavController);
+  placesService = inject(PlacesService);
+  activatedRoute = inject(ActivatedRoute);
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe((paramMap) => {
       if (!paramMap.has('placeId')) {
-        this.navCtrl.navigateBack('/places/tabs/offers');
+        this.router.navigateByUrl('/places/tabs/offers');
         return;
       }
 
       const placeId = paramMap.get('placeId');
-      this.placesService.getPlaceById(placeId!).subscribe((place) => {
-        if (place) {
-          this.placeData.set(place as Place);
+      this.placesService.getPlaceById(placeId!).subscribe(
+        (place) => {
+          if (place) {
+            this.placeData.set(place as Place);
 
-          this.form = new FormGroup({
-            title: new FormControl(this.placeData()?.title, {
-              updateOn: 'change',
-              validators: [Validators.required],
-            }),
-            description: new FormControl(this.placeData()?.description, {
-              updateOn: 'change',
-              validators: [Validators.required, Validators.maxLength(180)],
-            }),
-          });
+            this.form = new FormGroup({
+              title: new FormControl(this.placeData()?.title, {
+                updateOn: 'change',
+                validators: [Validators.required],
+              }),
+              description: new FormControl(this.placeData()?.description, {
+                updateOn: 'change',
+                validators: [Validators.required, Validators.maxLength(180)],
+              }),
+            });
+          } else {
+            this.returnPage();
+          }
+        },
+        (error) => {
+          console.error(error);
+          this.returnPage();
         }
-      });
+      );
     });
   }
 
+  returnPage() {
+    this.router.navigateByUrl('/places/tabs/offers');
+  }
+
   onUpdateOffer() {
-    if (!this.form.valid) {
+    if (this.form && !this.form?.valid) {
       return;
     }
 

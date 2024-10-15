@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { IonItemSliding } from '@ionic/angular';
 import { Place } from 'src/app/models/place.model';
 import { PlacesService } from 'src/app/services/places.service';
@@ -13,10 +13,10 @@ export class OffersPage {
   private placesService = inject(PlacesService);
   private router = inject(Router);
 
-  public isLoading = signal<boolean>(false);
+  public isLoading = signal<boolean>(true);
   public skeletonArray = signal<number[]>(Array.from(Array(5).keys()));
 
-  offers = signal<Place[]>(this.placesService.places);
+  offers = computed<Place[]>(() => this.placesService.places);
 
   onEdit(id: string, slidingItem: IonItemSliding) {
     slidingItem.close();
@@ -24,10 +24,10 @@ export class OffersPage {
   }
 
   ionViewWillEnter() {
-    this.isLoading.set(true);
-    setTimeout(() => {
-      this.offers.set(this.placesService.places);
+    this.placesService.fetchPlaces();
+
+    this.placesService.$places.subscribe(() => {
       this.isLoading.set(false);
-    }, Math.random() * 1500);
+    });
   }
 }

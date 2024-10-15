@@ -12,6 +12,7 @@
     class="ion-margin"
     color="primary"
     [routerLink]="['/', 'places','tabs','offers', 'edit', placeData()?.id]"
+    [disabled]="isLoading()"
   >
     Edit
   </ion-button>
