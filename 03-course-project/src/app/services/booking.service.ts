@@ -67,7 +67,11 @@ export class BookingService {
 
   loadBookings() {
     return this.httpClient
-      .get<{ [key: string]: Booking }>(this.firebaseUrl + 'bookings.json')
+      .get<{ [key: string]: Booking }>(
+        this.firebaseUrl +
+          'bookings.json?' +
+          `orderBy="userId"&equalTo="${this.authService.userId()}"`
+      )
       .subscribe({
         next: (response) => {
           const loadedBookings = [];
