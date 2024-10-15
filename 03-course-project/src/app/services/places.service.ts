@@ -51,7 +51,6 @@ export class PlacesService {
           }
         }
 
-        // Atualiza o signal com os dados carregados do Firebase
         this._places.set(loadedPlaces);
       });
   }

@@ -1,7 +1,9 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { Booking } from '../models/booking.model';
+/* eslint-disable no-prototype-builtins */
 import { AuthService } from './auth.service';
+import { Booking } from '../models/booking.model';
 import { HttpClient } from '@angular/common/http';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { inject, Injectable, signal } from '@angular/core';
 
 interface CreateBookingData {
   placeId: string;
@@ -21,22 +23,11 @@ export class BookingService {
   private httpClient = inject(HttpClient);
 
   private firebaseUrl =
-    'https://ionic-course-45875-default-rtdb.firebaseio.com/bookings.json';
+    'https://ionic-course-45875-default-rtdb.firebaseio.com/';
 
-  private _bookings = signal<Booking[]>([
-    {
-      id: 'xyz',
-      placeId: 'p1',
-      userId: 'abc',
-      placeTitle: 'Manhattan Mansion',
-      guestQuantity: 2,
-      placeImage: 'https://placehold.co/300x300',
-      firstName: 'Max',
-      lastName: 'Schwarz',
-      dateFrom: new Date('2019-01-01'),
-      dateTo: new Date('2019-01-05'),
-    },
-  ]);
+  private _bookings = signal<Booking[]>([]);
+
+  public $bookings = toObservable(this._bookings);
 
   get bookings() {
     return [...this._bookings()];
@@ -67,14 +58,54 @@ export class BookingService {
       new Date(dateTo)
     );
 
-    this.httpClient.post(this.firebaseUrl, { ...newBooking }).subscribe(() => {
-      this._bookings.update((bookings) => [...bookings, { ...newBooking }]);
-    });
+    this.httpClient
+      .post(this.firebaseUrl + 'bookings.json', { ...newBooking })
+      .subscribe(() => {
+        this._bookings.update((bookings) => [...bookings, { ...newBooking }]);
+      });
+  }
+
+  loadBookings() {
+    return this.httpClient
+      .get<{ [key: string]: Booking }>(this.firebaseUrl + 'bookings.json')
+      .subscribe({
+        next: (response) => {
+          const loadedBookings = [];
+
+          for (const key in response) {
+            if (response.hasOwnProperty(key)) {
+              loadedBookings.push(
+                new Booking(
+                  key,
+                  response[key].placeId,
+                  response[key].userId,
+                  response[key].placeTitle,
+                  response[key].guestQuantity,
+                  response[key].placeImage,
+                  response[key].firstName,
+                  response[key].lastName,
+                  new Date(response[key].dateFrom),
+                  new Date(response[key].dateTo)
+                )
+              );
+            }
+          }
+
+          this._bookings.set(loadedBookings);
+        },
+      });
   }
 
   cancelBooking(bookingId: string) {
+    this.removeBookingById(bookingId);
     this._bookings.update((bookings) =>
       bookings.filter((b) => b.id !== bookingId)
     );
+  }
+
+  removeBookingById(id: string) {
+    this.httpClient
+      .delete(this.firebaseUrl + `bookings/${id}.json`)
+      .subscribe();
   }
 }

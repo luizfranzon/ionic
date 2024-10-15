@@ -19,6 +19,9 @@ export class BookingsPage {
   }
 
   ionViewWillEnter() {
-    this.loadedBookings = signal(this.bookingsService.bookings);
+    this.bookingsService.loadBookings();
+    this.bookingsService.$bookings.subscribe(() => {
+      this.loadedBookings = signal(this.bookingsService.bookings);
+    });
   }
 }
