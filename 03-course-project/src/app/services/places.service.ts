@@ -1,6 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Place } from '../models/place.model';
 import { AuthService } from './auth.service';
+import { HttpClient } from '@angular/common/http';
 
 type CreatePlaceData = Omit<Place, 'id' | 'userId'>;
 interface UpdatePlaceData {
@@ -12,6 +13,10 @@ interface UpdatePlaceData {
 })
 export class PlacesService {
   private authService = inject(AuthService);
+  private httpClient = inject(HttpClient);
+
+  private firebaseUrl =
+    'https://ionic-course-45875-default-rtdb.firebaseio.com/';
 
   private _places = signal<Place[]>([
     new Place(
@@ -68,9 +73,16 @@ export class PlacesService {
       this.authService.userId()
     );
 
-    this._places.update((places) => {
-      return [...places, newPlace];
-    });
+    this.httpClient
+      .post<{ name: string }>(
+        `${this.firebaseUrl}/offered-places.json`,
+        newPlace
+      )
+      .subscribe((response) => {
+        this._places.update((places) => {
+          return [...places, { ...newPlace, id: response.name }];
+        });
+      });
   }
 
   updatePlaceById(id: string, data: UpdatePlaceData) {

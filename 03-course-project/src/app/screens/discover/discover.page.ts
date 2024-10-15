@@ -34,8 +34,4 @@ export class DiscoverPage {
       );
     }
   }
-
-  // onOpenMenu() {
-  //   this.menuCtrl.toggle('m1');
-  // }
 }

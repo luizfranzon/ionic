@@ -46,9 +46,6 @@ export class AuthPage {
       return;
     }
 
-    // const email = form.value.email;
-    // const password = form.value.password;
-
     if (this.isLoginAuthMode()) {
       this.onLogin();
       form.reset();
