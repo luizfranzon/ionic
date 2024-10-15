@@ -1,8 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
-import { MenuController, SegmentChangeEventDetail } from '@ionic/angular';
-import { PlacesService } from 'src/app/services/places.service';
+import { Place } from 'src/app/models/place.model';
 import { IonSegmentCustomEvent } from '@ionic/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { PlacesService } from 'src/app/services/places.service';
+import { Component, computed, inject, signal } from '@angular/core';
+import { MenuController, SegmentChangeEventDetail } from '@ionic/angular';
 
 @Component({
   selector: 'app-discover',
@@ -13,25 +14,38 @@ export class DiscoverPage {
   placeServices = inject(PlacesService);
   menuCtrl = inject(MenuController);
   authService = inject(AuthService);
+  filterType = signal<'all' | 'bookable'>('all');
 
-  loadedPlaces = signal(this.placeServices.places);
-  relevantPlaces = signal(this.placeServices.places);
+  loadedPlaces = computed(() => this.placeServices.places);
+  relevantPlaces = computed(() => {
+    return this.loadedPlaces().filter(
+      (p) => p.userId !== this.authService.userId()
+    );
+  });
+  showData = signal<Place[]>(this.loadedPlaces());
 
   ionViewWillEnter() {
-    this.loadedPlaces.set(this.placeServices.places);
+    this.placeServices.fetchPlaces();
+    this.placeServices.$places.subscribe(() => {
+      if (this.filterType() === 'all') {
+        this.showData.set(this.loadedPlaces());
+      } else {
+        this.showData.set(this.relevantPlaces());
+      }
+    });
   }
 
   onFilterUpdate(event: IonSegmentCustomEvent<SegmentChangeEventDetail>) {
     if (event.detail.value === 'all') {
-      this.relevantPlaces.set(this.loadedPlaces());
+      this.filterType.set('all');
+      this.placeServices.fetchPlaces();
+      this.showData.set(this.loadedPlaces());
     }
 
     if (event.detail.value === 'bookable') {
-      this.relevantPlaces.set(
-        this.loadedPlaces().filter(
-          (p) => p.userId !== this.authService.userId()
-        )
-      );
+      this.filterType.set('bookable');
+      this.placeServices.fetchPlaces();
+      this.showData.set(this.relevantPlaces());
     }
   }
 }

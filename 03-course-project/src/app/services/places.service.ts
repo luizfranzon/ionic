@@ -1,7 +1,9 @@
+/* eslint-disable no-prototype-builtins */
 import { inject, Injectable, signal } from '@angular/core';
 import { Place } from '../models/place.model';
 import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 type CreatePlaceData = Omit<Place, 'id' | 'userId'>;
 interface UpdatePlaceData {
@@ -18,41 +20,40 @@ export class PlacesService {
   private firebaseUrl =
     'https://ionic-course-45875-default-rtdb.firebaseio.com/';
 
-  private _places = signal<Place[]>([
-    new Place(
-      'p1',
-      'Manhattan Mansion',
-      'In the heart of New York City.',
-      'https://thumbs.6sqft.com/wp-content/uploads/2014/06/21042534/Felix_Warburg_Mansion_007.jpg?w=1560&format=webp',
-      149.99,
-      new Date('2024-10-18'),
-      new Date('2024-10-25'),
-      '1'
-    ),
-    new Place(
-      'p2',
-      "L'Amour Toujours",
-      'A romantic place in Paris!',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgALSQU3N0NPf9GhQ_nbEpMl8WheAndi835g&s',
-      189.99,
-      new Date('2019-04-21'),
-      new Date('2024-10-25'),
-      '2'
-    ),
-    new Place(
-      'p3',
-      'The Foggy Palace',
-      'Not your average city trip!',
-      'https://upload.wikimedia.org/wikipedia/commons/f/fa/Foggy_Day_Neuschwanstein_Castle_%28229936735%29.jpeg',
-      99.99,
-      new Date('2019-02-11'),
-      new Date('2024-10-25'),
-      '3'
-    ),
-  ]);
+  private _places = signal<Place[]>([]);
+
+  public $places = toObservable(this._places);
 
   get places() {
     return [...this._places()];
+  }
+
+  public fetchPlaces() {
+    this.httpClient
+      .get<{ [key: string]: Place }>(`${this.firebaseUrl}/offered-places.json`)
+      .subscribe((response) => {
+        const loadedPlaces = [];
+
+        for (const key in response) {
+          if (response.hasOwnProperty(key)) {
+            loadedPlaces.push(
+              new Place(
+                key,
+                response[key].title,
+                response[key].description,
+                response[key].imageUrl,
+                response[key].price,
+                new Date(response[key].dateFrom),
+                new Date(response[key].dateTo),
+                response[key].userId
+              )
+            );
+          }
+        }
+
+        // Atualiza o signal com os dados carregados do Firebase
+        this._places.set(loadedPlaces);
+      });
   }
 
   getPlaceById(id: string) {
