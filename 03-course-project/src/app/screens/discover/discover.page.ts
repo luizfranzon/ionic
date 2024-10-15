@@ -14,8 +14,8 @@ export class DiscoverPage {
   placeServices = inject(PlacesService);
   menuCtrl = inject(MenuController);
   authService = inject(AuthService);
-  filterType = signal<'all' | 'bookable'>('all');
 
+  filterType = signal<'all' | 'bookable'>('all');
   loadedPlaces = computed(() => this.placeServices.places);
   relevantPlaces = computed(() => {
     return this.loadedPlaces().filter(
@@ -23,8 +23,11 @@ export class DiscoverPage {
     );
   });
   showData = signal<Place[]>(this.loadedPlaces());
+  isLoading = signal<boolean>(true);
 
   ionViewWillEnter() {
+    console.log(this.isLoading());
+    this.isLoading.set(true);
     this.placeServices.fetchPlaces();
     this.placeServices.$places.subscribe(() => {
       if (this.filterType() === 'all') {
@@ -32,6 +35,9 @@ export class DiscoverPage {
       } else {
         this.showData.set(this.relevantPlaces());
       }
+
+      this.isLoading.set(false);
+      console.log(this.isLoading());
     });
   }
 

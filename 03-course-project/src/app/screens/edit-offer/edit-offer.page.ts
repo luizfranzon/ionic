@@ -28,22 +28,22 @@ export class EditOfferPage implements OnInit {
       }
 
       const placeId = paramMap.get('placeId');
-      const place = this.placesService.getPlaceById(placeId!);
+      this.placesService.getPlaceById(placeId!).subscribe((place) => {
+        if (place) {
+          this.placeData.set(place as Place);
 
-      if (place && place.id) {
-        this.placeData.set(place as Place);
-
-        this.form = new FormGroup({
-          title: new FormControl(this.placeData()?.title, {
-            updateOn: 'change',
-            validators: [Validators.required],
-          }),
-          description: new FormControl(this.placeData()?.description, {
-            updateOn: 'change',
-            validators: [Validators.required, Validators.maxLength(180)],
-          }),
-        });
-      }
+          this.form = new FormGroup({
+            title: new FormControl(this.placeData()?.title, {
+              updateOn: 'change',
+              validators: [Validators.required],
+            }),
+            description: new FormControl(this.placeData()?.description, {
+              updateOn: 'change',
+              validators: [Validators.required, Validators.maxLength(180)],
+            }),
+          });
+        }
+      });
     });
   }
 

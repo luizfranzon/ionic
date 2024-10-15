@@ -86,11 +86,11 @@ export class PlaceDetailPage implements OnInit {
       }
 
       const placeId = paramMap.get('placeId');
-      const place = this.placesService.getPlaceById(placeId!);
-
-      if (place && place.id) {
-        this.placeData.set(place as Place);
-      }
+      this.placesService.getPlaceById(placeId!).subscribe((place) => {
+        if (place) {
+          this.placeData.set(place as Place);
+        }
+      });
     });
   }
 }

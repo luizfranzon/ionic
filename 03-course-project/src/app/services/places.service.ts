@@ -57,7 +57,7 @@ export class PlacesService {
   }
 
   getPlaceById(id: string) {
-    return { ...this._places().find((p) => p.id === id) };
+    return this.httpClient.get(`${this.firebaseUrl}/offered-places/${id}.json`);
   }
 
   addPlace(data: CreatePlaceData) {
@@ -94,6 +94,24 @@ export class PlacesService {
       }
 
       const updatedPlace = { ...places[placeIndex], ...data };
+
+      this.httpClient
+        .put(`${this.firebaseUrl}/offered-places/${id}.json`, updatedPlace)
+        .subscribe(() => {
+          this._places.update((places) => {
+            const placeIndex = places.findIndex((p) => p.id === id);
+            if (placeIndex === -1) {
+              return places;
+            }
+
+            const updatedPlace = { ...places[placeIndex], ...data };
+            const updatedPlaces = [...places];
+            updatedPlaces[placeIndex] = updatedPlace;
+
+            return updatedPlaces;
+          });
+        });
+
       const updatedPlaces = [...places];
       updatedPlaces[placeIndex] = updatedPlace;
 
