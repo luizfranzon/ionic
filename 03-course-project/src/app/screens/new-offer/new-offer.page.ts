@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { PlaceLocation } from 'src/app/models/locations.model';
 import { PlacesService } from 'src/app/services/places.service';
 
 @Component({
@@ -33,7 +34,15 @@ export class NewOfferPage {
       updateOn: 'change',
       validators: [Validators.required],
     }),
+    location: new FormControl(null, {
+      updateOn: 'change',
+      validators: [Validators.required],
+    }),
   });
+
+  onLocationPicked(location: PlaceLocation) {
+    this.form.patchValue({ location });
+  }
 
   onCreateOffer() {
     if (!this.form.valid) {

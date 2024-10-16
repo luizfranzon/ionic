@@ -3,7 +3,7 @@ import {
   Component,
   ElementRef,
   inject,
-  Renderer2,
+  input,
   signal,
   viewChild,
 } from '@angular/core';
@@ -29,8 +29,15 @@ import { environment } from 'src/environments/environment';
   imports: [IonContent, IonButton, IonButtons, IonTitle, IonToolbar, IonHeader],
 })
 export class MapModalComponent implements AfterViewInit {
-  modalCtrl = inject(ModalController);
-  renderer = inject(Renderer2);
+  private modalCtrl = inject(ModalController);
+
+  public center = input({
+    lat: -23.55052,
+    lng: -46.633308,
+  });
+  public isSelectable = input<boolean>(true);
+  public closeButtonText = input<string>('Cancel');
+  public modalTitle = input<string>('Pick a location');
 
   mapRef = viewChild<ElementRef>('map');
 
@@ -46,22 +53,29 @@ export class MapModalComponent implements AfterViewInit {
       apiKey: environment.googleMapsApiKey,
       element: this.mapRef()?.nativeElement,
       config: {
-        center: {
-          lat: -23.55052,
-          lng: -46.633308,
-        },
+        center: this.center(),
         zoom: 12,
       },
     });
 
-    map.setOnMapClickListener((event) => {
-      const selectedCoords = {
-        lat: event.latitude,
-        lng: event.longitude,
-      };
+    if (this.isSelectable()) {
+      map.setOnMapClickListener((event) => {
+        const selectedCoords = {
+          lat: event.latitude,
+          lng: event.longitude,
+        };
 
-      this.modalCtrl.dismiss(selectedCoords, 'selected');
-    });
+        this.modalCtrl.dismiss(selectedCoords, 'selected');
+      });
+    } else {
+      map
+        .addMarker({
+          coordinate: this.center(),
+        })
+        .then((marker) => {
+          console.log(marker);
+        });
+    }
 
     this.newMap.set(map);
   }

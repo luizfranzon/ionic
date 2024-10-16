@@ -1,23 +1,45 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { IonButton, IonLabel, IonIcon } from '@ionic/angular/standalone';
+import {
+  IonButton,
+  IonLabel,
+  IonIcon,
+  IonImg,
+  IonThumbnail,
+  IonSkeletonText,
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { map as MapIcon } from 'ionicons/icons';
 import { MapModalComponent } from '../map-modal/map-modal.component';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs';
+import { map, of, switchMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { PlaceLocation } from 'src/app/models/locations.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-location-picker',
   templateUrl: './location-picker.component.html',
   styleUrls: ['./location-picker.component.scss'],
   standalone: true,
-  imports: [IonIcon, IonLabel, IonButton],
+  imports: [
+    IonSkeletonText,
+    IonImg,
+    IonIcon,
+    IonLabel,
+    IonButton,
+    IonThumbnail,
+    CommonModule,
+  ],
 })
 export class LocationPickerComponent {
   modalCtrl = inject(ModalController);
   httpClient = inject(HttpClient);
+
+  locationPick = output<PlaceLocation>();
+
+  selectedLocationImage = signal<null | string>(null);
+  isLoadingLocationImage = signal<boolean>(false);
 
   constructor() {
     addIcons({ MapIcon });
@@ -32,16 +54,45 @@ export class LocationPickerComponent {
         modalEl.present();
 
         modalEl.onDidDismiss().then((modalData) => {
-          const lat = modalData.data.lat;
-          const lng = modalData.data.lng;
+          const { lat, lng } = modalData.data;
+
+          this.isLoadingLocationImage.set(true);
 
           if (!modalData.data) {
             return;
           }
 
-          this.getAddressByCoordinates(lat, lng).subscribe(() => {});
+          const pickedLocation: PlaceLocation = {
+            lat,
+            lng,
+            address: null!,
+            staticMapImageUrl: null!,
+          };
+
+          this.getAddressByCoordinates(lat, lng)
+            .pipe(
+              switchMap((address) => {
+                pickedLocation.address = address;
+                return of(
+                  this.getMapImage(pickedLocation.lat, pickedLocation.lng, 18)
+                );
+              })
+            )
+            .subscribe((staticMapImageUrl) => {
+              pickedLocation.staticMapImageUrl = staticMapImageUrl;
+              this.selectedLocationImage.set(staticMapImageUrl);
+
+              this.locationPick.emit(pickedLocation);
+              this.isLoadingLocationImage.set(false);
+              this.locationPick.emit(pickedLocation);
+            });
         });
       });
+  }
+
+  private getMapImage(lat: number, lng: number, zoom: number) {
+    return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=500x300&maptype=roadmap
+    &markers=color:red%7Clabel:Place%7C${lat},${lng}&key=${environment.googleMapsApiKey}`;
   }
 
   private getAddressByCoordinates(lat: number, lng: number) {

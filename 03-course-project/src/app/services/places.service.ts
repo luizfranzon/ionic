@@ -45,7 +45,8 @@ export class PlacesService {
                 response[key].price,
                 response[key].dateFrom,
                 response[key].dateTo,
-                response[key].userId
+                response[key].userId,
+                response[key].location
               )
             );
           }
@@ -60,7 +61,7 @@ export class PlacesService {
   }
 
   addPlace(data: CreatePlaceData) {
-    const { title, description, price, dateFrom, dateTo } = data;
+    const { title, description, price, dateFrom, dateTo, location } = data;
 
     const newPlace = new Place(
       Math.floor(Math.random() * 1000).toString(),
@@ -70,7 +71,8 @@ export class PlacesService {
       price,
       dateFrom,
       dateTo,
-      this.authService.userId()
+      this.authService.userId(),
+      location
     );
 
     this.httpClient

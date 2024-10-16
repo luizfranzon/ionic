@@ -107,7 +107,7 @@
       </ion-row>
       <ion-row>
         <ion-col>
-          <app-location-picker />
+          <app-location-picker (locationPick)="onLocationPicked($event)" />
         </ion-col>
       </ion-row>
     </ion-grid>

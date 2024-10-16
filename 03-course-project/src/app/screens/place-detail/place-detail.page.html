@@ -25,12 +25,24 @@
           </ion-card-header>
           <ion-card-content>
             <ion-label>{{ placeData()?.description }}</ion-label>
+            <br />
+            <div style="display: flex; gap: 6px">
+              <ion-icon name="map-outline"></ion-icon>
+              <ion-label>{{ placeData()?.location?.address }}</ion-label>
+            </div>
           </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col> </ion-col>
+      <ion-col>
+        <ion-img
+          role="button"
+          (click)="onShowFullMap()"
+          style="margin-bottom: 80px"
+          [src]="placeData()?.location?.staticMapImageUrl"
+        ></ion-img>
+      </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>

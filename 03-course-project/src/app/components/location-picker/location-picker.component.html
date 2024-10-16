@@ -1,5 +1,16 @@
 <div>
-  <ion-button color="primary" (click)="onPickLocation()">
+  @if (selectedLocationImage() && !isLoadingLocationImage()) {
+  <ion-img (click)="onPickLocation()" [src]="selectedLocationImage()">
+  </ion-img>
+  } @else if (!selectedLocationImage() && isLoadingLocationImage()) {
+  <ion-thumbnail style="width: 100%; height: 100%">
+    <ion-skeleton-text
+      [animated]="true"
+      style="width: 100%; height: 300px"
+    ></ion-skeleton-text>
+  </ion-thumbnail>
+  }
+  <ion-button size="block" color="primary" (click)="onPickLocation()">
     <ion-icon name="map" slot="start"></ion-icon>
     <ion-label> Select location </ion-label>
   </ion-button>

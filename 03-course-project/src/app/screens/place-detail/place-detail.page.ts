@@ -5,7 +5,10 @@ import {
   ModalController,
   NavController,
 } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { mapOutline } from 'ionicons/icons';
 import { CreateBookingComponent } from 'src/app/components/create-booking/create-booking.component';
+import { MapModalComponent } from 'src/app/components/map-modal/map-modal.component';
 import { Place } from 'src/app/models/place.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { BookingService } from 'src/app/services/booking.service';
@@ -30,6 +33,26 @@ export class PlaceDetailPage implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private actionSheetCtrl = inject(ActionSheetController);
   private authService = inject(AuthService);
+
+  constructor() {
+    addIcons({ mapOutline });
+  }
+
+  ngOnInit(): void {
+    this.activatedRoute.paramMap.subscribe((paramMap) => {
+      if (!paramMap.has('placeId')) {
+        this.navCtrl.navigateBack('/places/tabs/discover');
+        return;
+      }
+
+      const placeId = paramMap.get('placeId');
+      this.placesService.getPlaceById(placeId!).subscribe((place) => {
+        if (place) {
+          this.placeData.set(place as Place);
+        }
+      });
+    });
+  }
 
   onBookPlace() {
     this.actionSheetCtrl
@@ -78,19 +101,22 @@ export class PlaceDetailPage implements OnInit {
       });
   }
 
-  ngOnInit(): void {
-    this.activatedRoute.paramMap.subscribe((paramMap) => {
-      if (!paramMap.has('placeId')) {
-        this.navCtrl.navigateBack('/places/tabs/discover');
-        return;
-      }
-
-      const placeId = paramMap.get('placeId');
-      this.placesService.getPlaceById(placeId!).subscribe((place) => {
-        if (place) {
-          this.placeData.set(place as Place);
-        }
+  onShowFullMap() {
+    this.modalCtrl
+      .create({
+        component: MapModalComponent,
+        componentProps: {
+          isSelectable: false,
+          closeButtonText: 'Close',
+          modalTitle: 'Place',
+          center: {
+            lat: this.placeData()?.location.lat,
+            lng: this.placeData()?.location.lng,
+          },
+        },
+      })
+      .then((modalEl) => {
+        modalEl.present();
       });
-    });
   }
 }
