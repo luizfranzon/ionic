@@ -35,8 +35,6 @@ export class LocationPickerComponent {
           const lat = modalData.data.lat;
           const lng = modalData.data.lng;
 
-          console.log(modalData);
-
           if (!modalData.data) {
             return;
           }

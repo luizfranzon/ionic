@@ -79,7 +79,6 @@ export class CreateBookingComponent implements OnInit {
 
   formatMaxDateTo() {
     const dateTo = new Date(this.selectedPlace().dateTo).toISOString();
-    console.log(dateTo);
     return dateTo;
   }
 
