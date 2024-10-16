@@ -51,6 +51,7 @@
         </ion-card>
       </ion-col>
     </ion-row>
+    @if (showData().length > 1) {
     <ion-row>
       <ion-col>
         <ion-list>
@@ -71,6 +72,7 @@
         </ion-list>
       </ion-col>
     </ion-row>
+    }
   </ion-grid>
   } @else if (isLoading() && showData()) {
   <ion-grid>
