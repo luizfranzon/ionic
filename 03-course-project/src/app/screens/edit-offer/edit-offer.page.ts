@@ -11,14 +11,15 @@ import { PlacesService } from 'src/app/services/places.service';
   styleUrls: ['./edit-offer.page.scss'],
 })
 export class EditOfferPage implements OnInit {
-  placeData = signal<Place | undefined>(undefined);
-
-  form!: FormGroup;
-
   router = inject(Router);
   navCtrl = inject(NavController);
   placesService = inject(PlacesService);
   activatedRoute = inject(ActivatedRoute);
+
+  placeData = signal<Place | undefined>(undefined);
+  placeId = signal<string | null>(null);
+
+  form!: FormGroup;
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe((paramMap) => {
@@ -27,12 +28,12 @@ export class EditOfferPage implements OnInit {
         return;
       }
 
-      const placeId = paramMap.get('placeId');
-      this.placesService.getPlaceById(placeId!).subscribe(
+      this.placeId.set(paramMap.get('placeId'));
+      this.placesService.getPlaceById(this.placeId()!).subscribe(
         (place) => {
           if (place) {
+            console.log('getPlace', place);
             this.placeData.set(place as Place);
-
             this.form = new FormGroup({
               title: new FormControl(this.placeData()?.title, {
                 updateOn: 'change',
@@ -66,9 +67,10 @@ export class EditOfferPage implements OnInit {
 
     const place = this.placeData();
     if (place && place.id) {
-      this.placesService.updatePlaceById(place.id, {
-        title: this.form.value.title,
-        description: this.form.value.description,
+      const { title, description } = this.form.value;
+      this.placesService.updatePlaceById(this.placeId()!, {
+        title,
+        description,
       });
 
       this.router.navigateByUrl('/places/tabs/offers');

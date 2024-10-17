@@ -22,6 +22,8 @@ export class PlacesService {
 
   private _places = signal<Place[]>([]);
 
+  //a
+
   public $places = toObservable(this._places);
 
   get places() {
@@ -30,7 +32,9 @@ export class PlacesService {
 
   public fetchPlaces() {
     this.httpClient
-      .get<{ [key: string]: Place }>(`${this.firebaseUrl}/offered-places.json`)
+      .get<{ [key: string]: Place }>(
+        `${this.firebaseUrl}/offered-places.json?orderBy="userId"&equalTo="${this.authService.userId}"`
+      )
       .subscribe((response) => {
         const loadedPlaces = [];
 
@@ -63,17 +67,18 @@ export class PlacesService {
   addPlace(data: CreatePlaceData) {
     const { title, description, price, dateFrom, dateTo, location } = data;
 
-    const newPlace = new Place(
-      Math.floor(Math.random() * 1000).toString(),
+    const newPlace = {
+      id: Math.floor(Math.random() * 500).toString(),
       title,
       description,
-      'https://upload.wikimedia.org/wikipedia/commons/f/fa/Foggy_Day_Neuschwanstein_Castle_%28229936735%29.jpeg',
+      imageUrl:
+        'https://upload.wikimedia.org/wikipedia/commons/f/fa/Foggy_Day_Neuschwanstein_Castle_%28229936735%29.jpeg',
       price,
       dateFrom,
       dateTo,
-      this.authService.userId(),
-      location
-    );
+      userId: this.authService.userId!,
+      location,
+    };
 
     this.httpClient
       .post<{ name: string }>(
@@ -89,7 +94,9 @@ export class PlacesService {
 
   updatePlaceById(id: string, data: UpdatePlaceData) {
     this._places.update((places) => {
-      const placeIndex = places.findIndex((p) => p.id === id);
+      console.log('TUDO', places);
+      const placeIndex = places.findIndex((p) => p.id == id);
+
       if (placeIndex === -1) {
         return places;
       }

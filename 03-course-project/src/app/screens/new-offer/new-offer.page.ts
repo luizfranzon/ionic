@@ -94,8 +94,6 @@ export class NewOfferPage {
       availableTo: new Date(this.form.value.dateTo),
     });
 
-    console.log(this.form.value);
-
     this.form.reset();
     this.router.navigateByUrl('/places/tabs/offers');
   }

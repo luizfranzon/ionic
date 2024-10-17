@@ -22,7 +22,7 @@ import { PlacesService } from 'src/app/services/places.service';
 export class PlaceDetailPage implements OnInit {
   public placeData = signal<Place | undefined>(undefined);
   public isBookable = computed(() => {
-    const userId = this.authService.userId();
+    const userId = this.authService.userId;
     return userId !== this.placeData()?.userId;
   });
 

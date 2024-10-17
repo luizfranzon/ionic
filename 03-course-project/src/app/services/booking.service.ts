@@ -48,7 +48,7 @@ export class BookingService {
     const newBooking = new Booking(
       Math.random().toString(),
       placeId,
-      this.authService.userId(),
+      this.authService.userId!,
       placeTitle,
       guestQuantity,
       placeImage,
@@ -70,7 +70,7 @@ export class BookingService {
       .get<{ [key: string]: Booking }>(
         this.firebaseUrl +
           'bookings.json?' +
-          `orderBy="userId"&equalTo="${this.authService.userId()}"`
+          `orderBy="userId"&equalTo="${this.authService.userId}"`
       )
       .subscribe({
         next: (response) => {

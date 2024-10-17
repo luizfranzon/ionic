@@ -68,13 +68,9 @@ export class MapModalComponent implements AfterViewInit {
         this.modalCtrl.dismiss(selectedCoords, 'selected');
       });
     } else {
-      map
-        .addMarker({
-          coordinate: this.center(),
-        })
-        .then((marker) => {
-          console.log(marker);
-        });
+      map.addMarker({
+        coordinate: this.center(),
+      });
     }
 
     this.newMap.set(map);

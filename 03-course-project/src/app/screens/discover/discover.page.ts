@@ -19,7 +19,7 @@ export class DiscoverPage {
   loadedPlaces = computed(() => this.placeServices.places);
   relevantPlaces = computed(() => {
     return this.loadedPlaces().filter(
-      (p) => p.userId !== this.authService.userId()
+      (p) => p.userId !== this.authService.userId
     );
   });
   showData = signal<Place[]>(this.loadedPlaces());
