@@ -1,0 +1,15 @@
+<div>
+  @if (selectedImage()){
+  <ion-img (click)="onPickImage()" [src]="selectedImage()"> </ion-img>
+  <ion-thumbnail style="width: 100%; height: 100%">
+    <ion-skeleton-text
+      [animated]="true"
+      style="width: 100%; height: 300px"
+    ></ion-skeleton-text>
+  </ion-thumbnail>
+  }
+  <ion-button size="block" color="primary" (click)="onPickImage()">
+    <ion-icon name="camera" slot="start"></ion-icon>
+    <ion-label> Select image </ion-label>
+  </ion-button>
+</div>

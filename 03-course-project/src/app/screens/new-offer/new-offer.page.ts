@@ -44,6 +44,8 @@ export class NewOfferPage {
     this.form.patchValue({ location });
   }
 
+  onImagePicked(imageBase64: string) {}
+
   onCreateOffer() {
     if (!this.form.valid) {
       return;

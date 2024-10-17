@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   IonCard,
   IonCardHeader,
@@ -34,8 +34,4 @@ import {
     IonThumbnail,
   ],
 })
-export class FeaturedHouseSkeletonComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit() {}
-}
+export class FeaturedHouseSkeletonComponent {}
