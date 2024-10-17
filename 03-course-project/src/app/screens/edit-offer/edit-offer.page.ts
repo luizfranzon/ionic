@@ -32,7 +32,6 @@ export class EditOfferPage implements OnInit {
       this.placesService.getPlaceById(this.placeId()!).subscribe(
         (place) => {
           if (place) {
-            console.log('getPlace', place);
             this.placeData.set(place as Place);
             this.form = new FormGroup({
               title: new FormControl(this.placeData()?.title, {

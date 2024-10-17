@@ -69,8 +69,6 @@ export class AuthService {
       environment.firebaseConfig.apiKey
     }`;
 
-    console.log('signup');
-
     const payload = {
       email,
       password,

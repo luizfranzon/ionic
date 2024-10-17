@@ -78,7 +78,7 @@ export class PlaceDetailPage implements OnInit {
     this.modalCtrl
       .create({
         component: CreateBookingComponent,
-        componentProps: { selectedPlace: this.placeData },
+        componentProps: { selectedPlace: this.placeData() },
         id: 'bookingModal',
       })
       .then((modalEl) => {
