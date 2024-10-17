@@ -31,15 +31,16 @@ export class DiscoverPage {
     this.placeServices.$places.subscribe(() => {
       if (this.filterType() === 'all') {
         this.showData.set(this.loadedPlaces());
+        this.isLoading.set(false);
       } else {
         this.showData.set(this.relevantPlaces());
+        this.isLoading.set(false);
       }
-
-      this.isLoading.set(false);
     });
   }
 
   onFilterUpdate(event: IonSegmentCustomEvent<SegmentChangeEventDetail>) {
+    this.isLoading.set(true);
     if (event.detail.value === 'all') {
       this.filterType.set('all');
       this.placeServices.fetchPlaces();
@@ -51,5 +52,7 @@ export class DiscoverPage {
       this.placeServices.fetchPlaces();
       this.showData.set(this.relevantPlaces());
     }
+
+    this.isLoading.set(false);
   }
 }

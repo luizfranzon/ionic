@@ -32,9 +32,7 @@ export class PlacesService {
 
   public fetchPlaces() {
     this.httpClient
-      .get<{ [key: string]: Place }>(
-        `${this.firebaseUrl}/offered-places.json?orderBy="userId"&equalTo="${this.authService.userId}"`
-      )
+      .get<{ [key: string]: Place }>(`${this.firebaseUrl}/offered-places.json`)
       .subscribe((response) => {
         const loadedPlaces = [];
 
@@ -94,7 +92,6 @@ export class PlacesService {
 
   updatePlaceById(id: string, data: UpdatePlaceData) {
     this._places.update((places) => {
-      console.log('TUDO', places);
       const placeIndex = places.findIndex((p) => p.id == id);
 
       if (placeIndex === -1) {
