@@ -102,6 +102,11 @@ export class AuthService {
         tokenExpirationDate: string;
       };
 
+      if (new Date(parsedData.tokenExpirationDate) <= new Date()) {
+        Storage.remove({ key: 'authData' });
+        return null;
+      }
+
       const expirationTime = new Date(parsedData.tokenExpirationDate);
       const user = new User(
         parsedData.userId,

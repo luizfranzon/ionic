@@ -22,8 +22,6 @@ export class PlacesService {
 
   private _places = signal<Place[]>([]);
 
-  //a
-
   public $places = toObservable(this._places);
 
   get places() {
