@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -14,14 +14,20 @@ import { AuthService, IAuthResponseData } from 'src/app/services/auth.service';
   templateUrl: './auth.page.html',
   styleUrls: ['./auth.page.scss'],
 })
-export class AuthPage {
+export class AuthPage implements OnInit {
   router = inject(Router);
   authService = inject(AuthService);
-  loadingCtrl = inject(LoadingController);
   alertCtrl = inject(AlertController);
+  loadingCtrl = inject(LoadingController);
 
   isLoading = signal(false);
   isLoginMode = signal<boolean>(true);
+
+  ngOnInit(): void {
+    if (this.authService.userId) {
+      this.router.navigateByUrl('/places/tabs/discover');
+    }
+  }
 
   onSubmit(form: NgForm) {
     if (!form.valid) {

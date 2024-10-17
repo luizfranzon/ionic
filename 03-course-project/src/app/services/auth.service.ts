@@ -1,8 +1,9 @@
+import { Observable, tap } from 'rxjs';
+import { User } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { User } from '../models/user.model';
+import { Storage } from '@capacitor/storage';
 
 export interface IAuthResponseData {
   idToken: string;
@@ -19,6 +20,12 @@ export class AuthService {
   private httpClient = inject(HttpClient);
 
   private _user = signal<User | null>(null);
+
+  constructor() {
+    this.autoLogin().then((user) => {
+      this._user.set(user);
+    });
+  }
 
   private firebaseAuthUrl = signal(
     'https://identitytoolkit.googleapis.com/v1/accounts:'
@@ -58,10 +65,13 @@ export class AuthService {
     this._user.set(
       new User(localId, email, idToken, expirationInOneHourFromNow)
     );
+
+    this.storeAuthData(localId, idToken, expirationInOneHourFromNow);
   }
 
   logout() {
     this._user.set(null);
+    Storage.remove({ key: 'authData' });
   }
 
   signup(email: string, password: string): Observable<IAuthResponseData> {
@@ -78,5 +88,40 @@ export class AuthService {
     return this.httpClient
       .post<IAuthResponseData>(url, payload)
       .pipe(tap(this.setUserData.bind(this)));
+  }
+
+  autoLogin() {
+    const result = Storage.get({ key: 'authData' }).then((data) => {
+      if (!data || !data.value) {
+        return null;
+      }
+
+      const parsedData = JSON.parse(data.value) as {
+        userId: string;
+        token: string;
+        tokenExpirationDate: string;
+      };
+
+      const expirationTime = new Date(parsedData.tokenExpirationDate);
+      const user = new User(
+        parsedData.userId,
+        '',
+        parsedData.token,
+        expirationTime
+      );
+
+      return user;
+    });
+
+    return result;
+  }
+
+  private storeAuthData(
+    userId: string,
+    token: string,
+    tokenExpirationDate: Date
+  ) {
+    const data = JSON.stringify({ userId, token, tokenExpirationDate });
+    Storage.set({ key: 'authData', value: data });
   }
 }
