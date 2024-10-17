@@ -5,7 +5,10 @@
     </ion-buttons>
     <ion-title>New Offer</ion-title>
     <ion-buttons slot="end">
-      <ion-button [disabled]="!form.valid" (click)="onCreateOffer()">
+      <ion-button
+        [disabled]="!form.valid || !form.get('image')!.value"
+        (click)="onCreateOffer()"
+      >
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -107,7 +110,10 @@
       </ion-row>
       <ion-row>
         <ion-col>
-          <app-location-picker (locationPick)="onLocationPicked($event)" />
+          <app-location-picker
+            [showPreviewImage]="!!form.get('location')?.value"
+            (locationPick)="onLocationPicked($event)"
+          />
         </ion-col>
       </ion-row>
       <ion-row>

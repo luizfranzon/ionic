@@ -13,7 +13,7 @@ import { map as MapIcon } from 'ionicons/icons';
 import { HttpClient } from '@angular/common/http';
 import { Geolocation } from '@capacitor/geolocation';
 import { PlaceLocation } from 'src/app/models/locations.model';
-import { Component, inject, output, signal } from '@angular/core';
+import { Component, inject, input, output, signal } from '@angular/core';
 import { MapModalComponent } from '../map-modal/map-modal.component';
 import { ActionSheetController, ModalController } from '@ionic/angular';
 import { GoogleMapsService } from 'src/app/services/google-maps.service';
@@ -38,6 +38,8 @@ export class LocationPickerComponent {
   modalCtrl = inject(ModalController);
   googleMapsService = inject(GoogleMapsService);
   actionSheetCtrl = inject(ActionSheetController);
+
+  showPreviewImage = input<boolean>(false);
 
   locationPick = output<PlaceLocation>();
 
